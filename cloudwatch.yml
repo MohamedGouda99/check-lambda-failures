@@ -1,0 +1,31 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >-
+  CloudFormation template to integrate EventBridge rule with Lambda
+Resources:
+  EventRule1:
+    Type: AWS::Events::Rule
+    Properties:
+      EventBusName: default
+      Name: test-eb-rule-for-every-3-min
+      ScheduleExpression: cron(0/3 * * * ? *)
+      State: ENABLED
+      Targets:
+        - Id: test-eb-rule-1-for-every-3-min
+          Arn: >-
+            arn:aws:lambda:<region>:<account_id>:function:error_handler
+          Input: |-
+            {
+              "body": {
+                "type": "test"
+              }
+            }
+  PermissionForEvent0ToInvokeLambda:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: error_handler
+      Action: "lambda:InvokeFunction"
+      Principal: "events.amazonaws.com"
+      SourceArn:
+        Fn::GetAtt:
+          - "EventRule1"
+          - "Arn"

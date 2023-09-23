@@ -1,0 +1,17 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Resources:
+  MySNSTopic:
+    Type: "AWS::SNS::Topic"
+    Properties: 
+      DisplayName: "mytopic"
+      TopicName: "mytopic"
+
+  MySNSEmailSubscription:
+    Type: "AWS::SNS::Subscription"
+    Properties: 
+      Protocol: "email"
+      TopicArn: 
+        Ref: "MySNSTopic"
+      Endpoint: "mohamed.ashraf.gouda99@gmail.com"
+    DependsOn: "MySNSTopic"

@@ -1,0 +1,40 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Create Lambda function with existing role
+
+Resources:  
+  LambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: error_handler
+      Handler: lambda_function.lambda_handler # Assuming your handler is in lambda_code.py with a function named 'handler'
+      Role: arn:aws:iam::629161141964:role/TerminateEC2Role # Replace YOUR_ACCOUNT_ID with your actual AWS account ID
+      Runtime: python3.9
+      Timeout: 60
+      Code:
+        S3Bucket: osabucket12329484118 # Replace with your S3 bucket name
+        S3Key: lambda_function.zip # Replace with the path to your code package on S3
+     
+
+  # LambdaSnsPermission:
+  #   Type: AWS::Lambda::Permission
+  #   Properties:
+  #     Action: lambda:InvokeFunction
+  #     FunctionName:
+  #       Ref: "LambdaFunction"
+  #     Principal: sns.amazonaws.com
+  #     SourceArn: 
+  #       Fn::Sub: "arn:aws:sns:us-east-2:629161141964:mytopic" # Replace with your existing SNS topic ARN
+
+  # LambdaSnsSubscription:
+  #   Type: AWS::SNS::Subscription
+  #   Properties: 
+  #     Protocol: "lambda"
+  #     TopicArn: 
+  #       Fn::Sub: "arn:aws:sns:us-east-2:629161141964:mytopic" # Replace with your existing SNS topic ARN
+  #     Endpoint: 
+  #       Fn::GetAtt:
+  #         - "LambdaFunction"
+  #         - "Arn"
+
+
+  
