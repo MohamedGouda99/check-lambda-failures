@@ -1,0 +1,1 @@
+aws lambda put-function-event-invoke-config --function-name error_handler --destination-config '{"OnFailure":{"Destination":"arn:aws:sns:us-east-2:629161141964:mytopic"}}'
